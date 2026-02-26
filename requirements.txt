@@ -1,0 +1,8 @@
+pyairtable
+requests
+pandas
+python-dotenv
+databricks-sdk
+pytest
+black
+ruff
