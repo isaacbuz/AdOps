@@ -9,6 +9,8 @@ from src.trafficking.qa_engine import QAEngine
 from src.alerting.pipeline import AlertPipeline
 from src.trafficking.meta_api import MetaAPIClient
 from src.trafficking.tiktok_api import TikTokAPIClient
+from src.trafficking.cm360_api import CM360APIClient
+from src.tracking.adobe_launch import AdobeLaunchClient
 
 class Orchestrator:
     def __init__(self):
@@ -92,6 +94,23 @@ class Orchestrator:
                 platform_dest = tkt_mapped.get("platform", "Unknown")
                 
                 campaign_taxonomy = cmp_mapped.get("campaign_name", "UNKNOWN")
+                # --- EXTENDED ENTERPRISE INTEGRATION: CM360 and Adobe Tag Manager ---
+                # Before deploying to the DSP, create the CM360 tracking shell.
+                if is_new_camp:
+                    print(f" -> 🌐 [Enterprise Flow] Securing Tracking via CM360 and Adobe Launch...")
+                    cm360 = CM360APIClient()
+                    adobe = AdobeLaunchClient()
+                    
+                    # 1. Create CM360 shell
+                    shell_id = cm360.create_campaign_shell(campaign_taxonomy, "2026-06-01", "2026-12-31")
+                    if shell_id:
+                        # 2. Get 1x1 tracking tags
+                        tags = cm360.create_placement_and_generate_tags(shell_id, f"{campaign_taxonomy}_Placement", "1234")
+                        if tags:
+                            # 3. Push pixel automatically to Tag Manager
+                            adobe_prop = adobe.fetch_launch_property("Disney+")
+                            if adobe_prop:
+                                adobe.inject_tracking_rule(adobe_prop, f"CM360_{campaign_taxonomy}_Pixel", tags["impression_pixel"])
                 
                 if platform_dest == "Meta" and is_new_camp:
                     print(" -> 🚀 Initiating Live API Deployment to Meta Sandbox...")
