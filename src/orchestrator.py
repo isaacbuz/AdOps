@@ -19,6 +19,36 @@ class Orchestrator:
         self.qa = QAEngine()
         self.alerter = AlertPipeline()
 
+    def _calculate_sla_and_routing(self, fields: dict) -> dict:
+        """Calculates SLA hours and Auto-Routes based on BOAT User Roles Glossary."""
+        req_type = fields.get("request_type", "")
+        urgency = fields.get("urgency", "Normal")
+        
+        # 1. Route to Role
+        if req_type in ["Automation Bug", "Feature", "Product Bug"]:
+            role = "Engineer"
+        elif req_type in ["Login", "CM Site Request"]:
+            role = "Project Manager"
+        else:
+            role = "Trafficker"
+            
+        # 2. SLA Hours Logic based on Urgency and Role
+        if urgency == "Critical":
+            base_sla = 48 if role == "Engineer" else 24
+            sla_hours = min(base_sla, 4)
+        elif urgency == "High":
+            base_sla = 48 if role == "Engineer" else 24
+            sla_hours = min(base_sla, 8)
+        else:
+            if role == "Engineer":
+                sla_hours = 48
+            elif role == "Project Manager":
+                sla_hours = 72
+            else:
+                sla_hours = 24
+                
+        return {"routed_to_role": role, "sla_hours": sla_hours}
+
     def run_pipeline(self):
         print("Starting Ad Ops Automation Pipeline...")
         
@@ -32,7 +62,11 @@ class Orchestrator:
             campaign_list = fields.get("campaign_id", [])
             campaign_id = campaign_list[0] if campaign_list else None
             
+            # Apply Auto-Routing and SLA
+            routing_data = self._calculate_sla_and_routing(fields)
+            
             print(f"\nProcessing Ticket: {fields.get('Ticket ID')} - {req_type}")
+            print(f" -> Auto-Routed to: {routing_data['routed_to_role']} | SLA: {routing_data['sla_hours']} hours")
             
             # 2. Get Campaign
             campaign = self.airtable.get_campaign(campaign_id) if campaign_id else None

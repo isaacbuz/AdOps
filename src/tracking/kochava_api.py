@@ -20,7 +20,7 @@ class KochavaAPIClient:
             "Accept": "application/json"
         }
 
-    def generate_tracker_url(self, campaign_name: str, network_name: str, site_id: str) -> dict:
+    def generate_tracker_url(self, campaign_name: str, network_name: str, site_id: str, device_type: str = "Mobile") -> dict:
         """
         Creates a new tracking link in Kochava for a specific campaign/network combination.
         Returns the Click URL and Impression URL to be embedded in the DSP.
@@ -29,14 +29,25 @@ class KochavaAPIClient:
             print("⚠️ Skipping Kochava Tracker Creation: Credentials missing in .env")
             return None
 
+        # Adjust destination URL based on Device Type
+        if device_type == "Samsung Tizen":
+            destination_url = "https://tv.samsung.com/app/disneyplus"
+            tracker_type = "ctv_acquisition"
+        elif device_type == "CTV":
+            destination_url = "https://roku.com/app/disneyplus" # Generic CTV fallback
+            tracker_type = "ctv_acquisition"
+        else:
+            destination_url = "https://apps.apple.com/us/app/disney/id1446075923"
+            tracker_type = "acquisition"
+
         # Kochava needs to know which app we are tracking and which network we are sending traffic from
         payload = {
             "app_guid": self.app_guid,
             "network_name": network_name, # e.g. "Facebook", "TikTok"
             "campaign_name": campaign_name,
-            "tracker_name": f"{campaign_name}_{network_name}_Tracker",
-            "type": "acquisition",
-            "destination_url": "https://apps.apple.com/us/app/disney/id1446075923" # Redirects to App Store
+            "tracker_name": f"{campaign_name}_{network_name}_{device_type.replace(' ', '')}_Tracker",
+            "type": tracker_type,
+            "destination_url": destination_url
         }
 
         try:

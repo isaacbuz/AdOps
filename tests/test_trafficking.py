@@ -6,11 +6,11 @@ def engine():
     return TraffickingEngine()
 
 def test_eve_version_routing(engine):
-    assert engine.get_eve_version("DV360", "ProgDisplay") == "V1"
-    assert engine.get_eve_version("Yahoo DSP", "ProgDisplay") == "V2"
-    assert engine.get_eve_version("CM360", "YouTube") == "V2.1"
-    assert engine.get_eve_version("CM360", "ProgAudio") == "V2.2"
-    assert engine.get_eve_version("Amazon DSP", "ProgCTV") == "V3"
+    assert engine.get_eve_version("DV360", "ProgDisplay")["version"] == "V1"
+    assert engine.get_eve_version("Yahoo DSP", "ProgDisplay")["version"] == "V2"
+    assert engine.get_eve_version("CM360", "YouTube")["version"] == "V2.1"
+    assert engine.get_eve_version("CM360", "ProgAudio")["version"] == "V2.2"
+    assert engine.get_eve_version("Amazon DSP", "ProgCTV")["version"] == "V3"
 
 def test_build_placement_taxonomy(engine):
     ticket = {}

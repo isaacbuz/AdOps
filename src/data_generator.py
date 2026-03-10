@@ -59,18 +59,22 @@ MARKETS = [
     {"code": "CO (ES)", "geo": "CO", "country": "Colombia", "lang": "ES", "cluster": "ClPeCo", "region": "LATAM"},
 ]
 
-# Brand mapping (from BOAT VLOOKUP Tables)
+# Brand mapping (from BOAT VLOOKUP Tables) - updated for new Enterprise Segments
 BRANDS = [
-    {"airtable_value": "Disney+ Standalone", "central_grid": "PLUS", "product": "Disney+", "code": "PLUS"},
-    {"airtable_value": "Bundle", "central_grid": "DBUN", "product": "Bundle", "code": "DBUN"},
-    {"airtable_value": "Disney", "central_grid": "DIS", "product": "Disney+", "code": "DIS"},
-    {"airtable_value": "Marvel", "central_grid": "MAR", "product": "Disney+", "code": "MAR"},
-    {"airtable_value": "Star Wars", "central_grid": "SW", "product": "Disney+", "code": "SW"},
-    {"airtable_value": "Pixar", "central_grid": "PIX", "product": "Disney+", "code": "PIX"},
-    {"airtable_value": "National Geographic", "central_grid": "NG", "product": "Disney+", "code": "NG"},
-    {"airtable_value": "Star", "central_grid": "STAR", "product": "Star", "code": "STAR"},
-    {"airtable_value": "STAR+", "central_grid": "STAR+", "product": "Star+", "code": "STAR+"},
-    {"airtable_value": "COMBO+", "central_grid": "COMBO+", "product": "Combo+", "code": "COMBO+"},
+    {"airtable_value": "Disney+ Standalone", "central_grid": "PLUS", "product": "Disney+", "code": "PLUS", "segment": "DET"},
+    {"airtable_value": "Bundle", "central_grid": "DBUN", "product": "Bundle", "code": "DBUN", "segment": "DET"},
+    {"airtable_value": "Disney", "central_grid": "DIS", "product": "Disney+", "code": "DIS", "segment": "DET"},
+    {"airtable_value": "Marvel", "central_grid": "MAR", "product": "Marvel", "code": "MAR", "segment": "Studios"},
+    {"airtable_value": "Star Wars", "central_grid": "SW", "product": "Star Wars", "code": "SW", "segment": "Studios"},
+    {"airtable_value": "Pixar", "central_grid": "PIX", "product": "Pixar", "code": "PIX", "segment": "Studios"},
+    {"airtable_value": "National Geographic", "central_grid": "NG", "product": "NatGeo", "code": "NG", "segment": "DET"},
+    {"airtable_value": "Star", "central_grid": "STAR", "product": "Star", "code": "STAR", "segment": "DET"},
+    {"airtable_value": "STAR+", "central_grid": "STAR+", "product": "Star+", "code": "STAR+", "segment": "DET"},
+    {"airtable_value": "COMBO+", "central_grid": "COMBO+", "product": "Combo+", "code": "COMBO+", "segment": "DET"},
+    {"airtable_value": "ESPN", "central_grid": "ESPN", "product": "ESPN+", "code": "ESPN", "segment": "ESPN"},
+    {"airtable_value": "Disney Parks", "central_grid": "PARKS", "product": "Theme Parks", "code": "PARKS", "segment": "Experiences"},
+    {"airtable_value": "Disney Cruise Line", "central_grid": "DCL", "product": "Cruise Line", "code": "DCL", "segment": "Experiences"},
+    {"airtable_value": "Disney Store", "central_grid": "STORE", "product": "Consumer Products", "code": "STORE", "segment": "DCP"},
 ]
 
 # Channel mapping (from BOAT VLOOKUP Tables)
@@ -89,8 +93,8 @@ CHANNELS = [
 
 # User roles (from BOAT User Roles Glossary)
 USERS = [
-    {"name": "Isaac Buziba", "email": "isaac.buziba@disney.com", "role": "Engineer", "team": "Growth Marketing"},
-    {"name": "Craig Shank", "email": "craig.shank@disney.com", "role": "Engineer", "team": "Growth Marketing"},
+    {"name": "Isaac Buziba", "email": "isaac.buziba@disney.com", "role": "Engineer", "team": "Marketing Ops & Tech"},
+    {"name": "Craig Shank", "email": "craig.shank@disney.com", "role": "Engineer", "team": "Marketing Ops & Tech"},
     {"name": "Carlton Clemens", "email": "carlton.clemens@disney.com", "role": "Project Manager", "team": "Ad Ops PMO"},
     {"name": "Maurice Dib", "email": "maurice.dib@disney.com", "role": "Trafficker", "team": "Ad Ops"},
     {"name": "Chris Cha", "email": "chris.cha@disney.com", "role": "Trafficker", "team": "Ad Ops"},
@@ -102,6 +106,18 @@ USERS = [
     {"name": "Ken Lin", "email": "ken.lin@disney.com", "role": "Trafficker", "team": "Ad Ops"},
     {"name": "Elizabeth Mak", "email": "elizabeth.mak@disney.com", "role": "Trafficker", "team": "Ad Ops"},
     {"name": "Cynthia Sanchez", "email": "cynthia.sanchez@disney.com", "role": "Project Manager", "team": "Ad Ops PMO"},
+    # New Marketing Leadership Team (as of latest announcement)
+    {"name": "Asad Ayaz", "email": "asad.ayaz@disney.com", "role": "Chief Brand Officer", "team": "Enterprise Marketing"},
+    {"name": "Tina Thornton", "email": "tina.thornton@disney.com", "role": "Segment Leader", "team": "ESPN Marketing"},
+    {"name": "Shannon Ryan", "email": "shannon.ryan@disney.com", "role": "Segment Leader", "team": "DET, Disney+ & Hulu Marketing"},
+    {"name": "Martha Morrison", "email": "martha.morrison@disney.com", "role": "Segment Leader", "team": "Disney Entertainment Studios Marketing"},
+    {"name": "Scott Hudgins", "email": "scott.hudgins@disney.com", "role": "Segment Leader", "team": "Disney Experiences Marketing"},
+    {"name": "Ron Faris", "email": "ron.faris@disney.com", "role": "Segment Leader", "team": "Disney Consumer Products Marketing"},
+    {"name": "Joanna Balikian", "email": "joanna.balikian@disney.com", "role": "Enterprise Leader", "team": "Brand & Franchise"},
+    {"name": "Becca Vodnoy", "email": "becca.vodnoy@disney.com", "role": "Enterprise Leader", "team": "Corporate Alliances"},
+    {"name": "Carrie Brzezinski-Hsu", "email": "carrie.b@disney.com", "role": "Enterprise Leader", "team": "Creative Execution"},
+    {"name": "Kimberly Flaster", "email": "kimberly.flaster@disney.com", "role": "Enterprise Leader", "team": "Media"},
+    {"name": "Andrew Ferguson", "email": "andrew.ferguson@disney.com", "role": "Enterprise Leader", "team": "Research & Insights"},
 ]
 
 # Ticket types (from BOAT User Roles Glossary — ticket type → role routing)
@@ -165,7 +181,7 @@ AUDIENCES = [
     {"tactic": "Retargeting", "strategy": "Behavior", "detailed": "MLP Email", "source": "1P"},
 ]
 
-# Disney+ content titles (realistic examples for campaign names)
+# Disney content/experiences (realistic examples for campaign names including new segments)
 TITLES = [
     "Loki Season 3", "Moana Live Action", "Andor Season 2", "The Mandalorian S4",
     "Inside Out 3", "Thunderbolts", "Daredevil Born Again", "Skeleton Crew S2",
@@ -174,6 +190,8 @@ TITLES = [
     "Monsters at Work S3", "Zootopia 2", "Incredibles 3", "Tron Ares",
     "The Fantastic Four", "Captain America Brave New World", "Spider-Man Animated",
     "Star Wars Dawn of the Jedi", "National Geographic Arctic", "ESPN+ UFC 320",
+    "Walt Disney World Summer Promo", "Disneyland Magic Key Promo", "Disney Cruise Treasure Inaugural",
+    "Disney Store Holiday Sale", "ESPN College Football Playoffs", "ESPN+ Draft Night",
 ]
 
 
@@ -193,9 +211,10 @@ def generate_titles(n=20):
             "title_name": name,
             "brand": brand["airtable_value"],
             "brand_code": brand["code"],
+            "segment": brand.get("segment", "Unknown"),
             "product": brand["product"],
             "release_date": release.strftime("%Y-%m-%d"),
-            "content_type": random.choice(["Series", "Film", "Special", "Live Event"]),
+            "content_type": random.choice(["Series", "Film", "Special", "Live Event", "Promo", "Merch"]),
         })
     return pd.DataFrame(titles)
 
@@ -221,6 +240,7 @@ def generate_campaigns(titles_df, n=60):
             "title_name": title["title_name"],
             "brand": title["brand"],
             "brand_code": title["brand_code"],
+            "segment": title["segment"],
             "product": title["product"],
             "campaign_name": campaign_name,
             "campaign_objective": objective,
@@ -325,6 +345,7 @@ def generate_tickets(campaigns_df, n=120):
             "platform": camp["platform"],
             "targeting_geo": camp["targeting_geo"],
             "brand": camp["brand_code"],
+            "segment": camp["segment"],
             "requested_by": random.choice(REQUESTERS),
             "created_date": created.strftime("%Y-%m-%d"),
             "due_date": (created + timedelta(hours=sla_hrs)).strftime("%Y-%m-%d %H:%M"),

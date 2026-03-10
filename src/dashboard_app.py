@@ -48,26 +48,19 @@ def load_data():
     data_dir = os.path.join(os.path.dirname(__file__), "..", "data")
     
     # Check if data exists
-    if not os.path.exists(data_dir):
+    if not os.path.exists(os.path.join(data_dir, "03_delivery.csv")):
         return None, None
         
-    perf_files = glob.glob(os.path.join(data_dir, "campaign_performance_*.csv"))
-    ticket_files = glob.glob(os.path.join(data_dir, "tickets_*.csv"))
-    
-    df_perf = None
-    df_tickets = None
-    
-    # Load most recent performance data
-    if perf_files:
-        latest_perf = max(perf_files, key=os.path.getctime)
-        df_perf = pd.read_csv(latest_perf)
-        df_perf['date'] = pd.to_datetime(df_perf['date'])
+    # Load and merge performance data
+    df_delivery = pd.read_csv(os.path.join(data_dir, "03_delivery.csv"))
+    df_campaigns = pd.read_csv(os.path.join(data_dir, "02_campaigns.csv"))
+    df_perf = df_delivery.merge(df_campaigns[['campaign_id', 'segment', 'brand_code', 'channel_mapped']], on='campaign_id', how='left')
+    df_perf['date'] = pd.to_datetime(df_perf['date'])
         
-    # Load most recent ticket data
-    if ticket_files:
-        latest_ticket = max(ticket_files, key=os.path.getctime)
-        df_tickets = pd.read_csv(latest_ticket)
-        df_tickets['created_at'] = pd.to_datetime(df_tickets['created_at'])
+    # Load ticket data
+    df_tickets = pd.read_csv(os.path.join(data_dir, "04_tickets.csv"))
+    df_tickets = df_tickets.rename(columns={'ticket_id': 'id', 'created_date': 'created_at', 'stage': 'status'})
+    df_tickets['created_at'] = pd.to_datetime(df_tickets['created_at'])
         
     return df_perf, df_tickets
 
@@ -81,6 +74,10 @@ if df_perf is None or df_tickets is None:
 st.sidebar.header("Command Filters")
 st.sidebar.markdown("Filter live telemetry:")
 
+# Get unique segments
+segments = ["All"] + list(df_perf["segment"].dropna().unique())
+selected_segment = st.sidebar.selectbox("Enterprise Segment", segments)
+
 # Get unique brands
 brands = ["All"] + list(df_perf["brand_code"].unique())
 selected_brand = st.sidebar.selectbox("Brand", brands)
@@ -92,6 +89,10 @@ selected_channel = st.sidebar.selectbox("Channel", channels)
 # Filter Data
 filtered_perf = df_perf.copy()
 filtered_tickets = df_tickets.copy()
+
+if selected_segment != "All":
+    filtered_perf = filtered_perf[filtered_perf["segment"] == selected_segment]
+    filtered_tickets = filtered_tickets[filtered_tickets["segment"] == selected_segment]
 
 if selected_brand != "All":
     filtered_perf = filtered_perf[filtered_perf["brand_code"] == selected_brand]
@@ -134,10 +135,10 @@ st.markdown("<br>", unsafe_allow_html=True)
 col_left, col_right = st.columns(2)
 
 with col_left:
-    st.subheader("Spend by Channel")
+    st.subheader("Spend by Marketing Segment")
     if not filtered_perf.empty:
-        spend_by_channel = filtered_perf.groupby("channel_mapped")["spend_usd"].sum().reset_index()
-        fig_spend = px.pie(spend_by_channel, values="spend_usd", names="channel_mapped", 
+        spend_by_segment = filtered_perf.groupby("segment")["spend_usd"].sum().reset_index()
+        fig_spend = px.pie(spend_by_segment, values="spend_usd", names="segment", 
                           color_discrete_sequence=px.colors.sequential.Teal)
         fig_spend.update_layout(plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)", font_color="white")
         st.plotly_chart(fig_spend, use_container_width=True)

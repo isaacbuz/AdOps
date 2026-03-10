@@ -81,6 +81,12 @@ class CM360APIClient:
                 "click_tag": f"https://ad.doubleclick.net/ddm/trackclk/N{self.network_id}.{site_id}/B{campaign_id}.{placement_id};dc_trk_aid=0;dc_trk_cid=0;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd=",
                 "impression_pixel": f"https://ad.doubleclick.net/ddm/trackimp/N{self.network_id}.{site_id}/B{campaign_id}.{placement_id};dc_trk_aid=0;dc_trk_cid=0;ord=[timestamp];dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd=?"
             }
+            
+            # Inject Flashtalking GDPR & US_Privacy macros
+            privacy_macros = "&gdpr=${GDPR}&gdpr_consent=${GDPR_CONSENT_78}&us_privacy=${US_PRIVACY}"
+            cmp_tracker["click_tag"] += privacy_macros
+            cmp_tracker["impression_pixel"] += privacy_macros
+            
             print(f"🔗 Generated CM360 Tracking Tags. Ready to append to DSP payloads.")
             return cmp_tracker
             

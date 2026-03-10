@@ -31,7 +31,7 @@ def test_run_all_checks_count(qa):
     campaign = {"landing_page": "https://disney.com", "targeting_geo": "US"}
     payloads = [TraffickingPayload("CMP-1", "CM360", "CREATE", {})]
     results = qa.run_all_checks(payloads, campaign)
-    assert len(results) == 8
+    assert len(results) == 9
     
     # Asserting correct structure
     for res in results:
